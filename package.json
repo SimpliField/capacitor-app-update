@@ -1,7 +1,7 @@
 {
   "name": "@simplifield/capacitor-app-update",
   "version": "0.0.1",
-  "description": "Checks for app updates on Aplle Store and Google Play",
+  "description": "Check for app updates on Aplle Store and Google Play",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SimpliField/capacitor-app-update.git.git"
+    "url": "git+https://github.com/SimpliField/capacitor-app-update.git"
   },
   "bugs": {
-    "url": "https://github.com/SimpliField/capacitor-app-update.git/issues"
+    "url": "https://github.com/SimpliField/capacitor-app-update/issues"
   },
   "keywords": [
     "capacitor",
