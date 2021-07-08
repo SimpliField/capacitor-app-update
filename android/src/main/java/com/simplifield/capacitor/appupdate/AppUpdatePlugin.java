@@ -24,30 +24,32 @@ public class AppUpdatePlugin extends Plugin {
 
     @PluginMethod
     public void getAppUpdateInfo(PluginCall call) {
-        Context context = this.getContext();
+        try {
+            Context context = this.getContext();
 
-        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(context);
+            AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(context);
 
-        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
-        appUpdateInfoTask.addOnSuccessListener(
-            appUpdateInfo -> {
-                PackageInfo pInfo = null;
-                try {
-                    pInfo = implementation.getPackageInfo(context);
-                } catch (PackageManager.NameNotFoundException e) {
-                    call.reject("Unable to get App Info");
-                    return;
+            Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+            appUpdateInfoTask.addOnSuccessListener(
+                appUpdateInfo -> {
+                    try {
+                        PackageInfo pInfo = implementation.getPackageInfo(context);
+                        JSObject updInfo = implementation.getAppUpdateInfo(context, appUpdateInfo, pInfo);
+                        call.resolve(updInfo);
+                    } catch (Exception e) {
+                        call.reject("Unable to get App Info");
+                    }
                 }
-                JSObject updInfo = implementation.getAppUpdateInfo(context, appUpdateInfo, pInfo);
-                call.resolve(updInfo);
-            }
-        );
-        appUpdateInfoTask.addOnFailureListener(
-                failure -> {
-                    String message = failure.getMessage();
-                    call.reject(message);
-                }
-        );
+            );
+            appUpdateInfoTask.addOnFailureListener(
+                    failure -> {
+                        String message = failure.getMessage();
+                        call.reject(message);
+                    }
+            );
+        } catch (Exception e) {
+            call.reject("Unable to get App Info");
+        }
     }
 
     @PluginMethod
