@@ -25,13 +25,13 @@ npx cap sync
 ### getAppUpdateInfo()
 
 ```typescript
-getAppUpdateInfo() => any
+getAppUpdateInfo() => Promise<AppUpdateInfo>
 ```
 
 Supported platform(s): Android, iOS
 Returns app update informations.
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#appupdateinfo">AppUpdateInfo</a>&gt;</code>
 
 --------------------
 
@@ -39,13 +39,11 @@ Returns app update informations.
 ### openAppStore()
 
 ```typescript
-openAppStore() => any
+openAppStore() => Promise<void>
 ```
 
 Supported platform(s): Android, iOS
 Opens the app store entry of the app in the Play Store (Android) or App Store (iOS).
-
-**Returns:** <code>any</code>
 
 --------------------
 
