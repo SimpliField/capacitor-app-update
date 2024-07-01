@@ -1,0 +1,60 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+  build-tools: simplifield/build-tools@1.2.1
+  gcp-cli: circleci/gcp-cli@2.4.0
+commands:
+  attach-workspace:
+    steps:
+      - attach_workspace:
+          at: ~/project
+
+jobs:
+
+  build:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - run: npm ci && npm run build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./*
+
+  release:
+    executor:
+      name: node/default
+    steps:
+      - attach-workspace
+      - run: git config user.email circleci@simplifield.com
+      - run: git config user.name "CircleCI"
+      - run: mkdir -p ~/.ssh
+      - run: ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - run: npm run release
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: git push --follow-tags origin main && npm publish
+
+
+workflows:
+  build-test-release:
+    jobs:
+      - build:
+          context:
+            - npm
+
+      - request-release:
+          type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+
+      - release:
+          requires:
+            - request-release
+          context:
+            - npm
+            - github
