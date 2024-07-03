@@ -1,6 +1,6 @@
 {
   "name": "@simplifield/capacitor-app-update",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Check for app updates on Aplle Store and Google Play",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
